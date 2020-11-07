@@ -18,6 +18,12 @@ document.addEventListener(
   false
 );
 
+// 處理返回導向
+window.history.pushState(null, null, "#");
+window.addEventListener("popstate", function() {
+  window.location.href = "/";
+});
+
 new Vue({
   router,
   render: h => h(App)
