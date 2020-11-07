@@ -12,17 +12,30 @@
           @blur="setFocusStyle(false)"
         )
         .deco(ref="deco")
-      //- router-link(class="form__button" to="/about") 確認
       .form__button(@click="toDisplay") 確認
-    .warning-wrapper
+    .warning-wrapper(ref="warning")
       .warning
+        .warning__icon
+        .warning__text {{ warningText }}
 </template>
 
 <script>
 export default {
   data() {
     return {
-      textVal: "慢"
+      textVal: "慢",
+      warningText: null,
+      wordingCheckList: [
+        "幹",
+        "淦",
+        "幹你娘",
+        "雞掰",
+        "耖",
+        "靠杯",
+        "靠腰",
+        "fuck",
+        "bitch"
+      ]
     };
   },
   mounted() {
@@ -30,8 +43,23 @@ export default {
   },
   methods: {
     toDisplay() {
-      // TODO: 太多字
-      // this.textVal.length 
+      // 太多字
+      if (this.textVal.length > 10) {
+        this.setWarning(true, "字數過多，請重新輸入");
+        setTimeout(() => {
+          this.setWarning(false);
+        }, 2000);
+        return;
+      }
+      // 夾帶髒話
+      if (this.checkWording(this.textVal)) {
+        this.setWarning(true, "請勿夾帶髒話");
+        setTimeout(() => {
+          this.setWarning(false);
+        }, 2000);
+        return;
+      }
+
       window.localStorage.setItem("displayText", this.textVal);
       this.$router.push("display");
     },
@@ -40,6 +68,21 @@ export default {
         this.$refs.deco.style.width = "100%";
       } else {
         this.$refs.deco.style.width = "0px";
+      }
+    },
+    checkWording(sentence) {
+      const checkSentence = sentence.toLowerCase();
+      return this.wordingCheckList.some(word => {
+        return checkSentence.includes(word);
+      });
+    },
+    setWarning(bool, message) {
+      if (bool) {
+        this.warningText = message;
+        this.$refs.warning.style.bottom = "0";
+      } else {
+        this.warningText = null;
+        this.$refs.warning.style.bottom = "-54px";
       }
     }
   }
@@ -96,7 +139,7 @@ export default {
 }
 .warning-wrapper {
   position: fixed;
-  bottom: 0;
+  bottom: -54px;
   left: 0;
   width: 100%;
   height: 54px;
@@ -104,10 +147,27 @@ export default {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  transition: all 0.5s;
   .warning {
     width: 96%;
     height: 90%;
     background: rgb(255, 71, 71);
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    &__icon {
+      width: 24px;
+      height: 24px;
+      background-color: white;
+      mask-image: url("~@/assets/error-black-18dp.svg");
+      mask-repeat: no-repeat;
+      mask-position: center;
+      margin-right: 6px;
+    }
+    &__text {
+      color: white;
+      font-weight: bold;
+    }
   }
 }
 </style>

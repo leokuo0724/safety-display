@@ -40,7 +40,7 @@ export default {
     marqueeEffect() {
       const text = this.$refs.displayText;
       this.timer = setInterval(() => {
-        text.scrollLeft+=10;
+        text.scrollLeft += 10;
         if (text.scrollLeft >= text.scrollWidth - screen.width) {
           text.scrollLeft = 0;
         }
