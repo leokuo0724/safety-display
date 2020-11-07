@@ -1,7 +1,7 @@
 <template lang="pug">
   .home-root
     .form
-      h1 APP 名稱
+      h1 慢
       .form__input-section
         p 請輸入欲顯示之文字
         input(
@@ -105,6 +105,9 @@ export default {
     align-items: center;
     border-radius: 8px;
     box-shadow: 0px 5px 20px 5px rgba(0, 0, 0, 0.2);
+    > h1 {
+      color: #0047ff;
+    }
     &__input-section {
       display: flex;
       flex-direction: column;
@@ -118,7 +121,6 @@ export default {
         border: none;
         padding: 0 8px;
         background: rgba(#e5e5e5, 0.4);
-        // border-bottom: 2px solid #0047ff;
       }
       .deco {
         width: 10%;
