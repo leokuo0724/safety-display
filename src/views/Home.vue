@@ -46,17 +46,11 @@ export default {
       // 太多字
       if (this.textVal.length > 10) {
         this.setWarning(true, "字數過多，請重新輸入");
-        setTimeout(() => {
-          this.setWarning(false);
-        }, 2000);
         return;
       }
       // 夾帶髒話
       if (this.checkWording(this.textVal)) {
         this.setWarning(true, "請勿夾帶髒話");
-        setTimeout(() => {
-          this.setWarning(false);
-        }, 2000);
         return;
       }
 
@@ -80,6 +74,9 @@ export default {
       if (bool) {
         this.warningText = message;
         this.$refs.warning.style.bottom = "0";
+        setTimeout(() => {
+          this.setWarning(false);
+        }, 2000);
       } else {
         this.warningText = null;
         this.$refs.warning.style.bottom = "-54px";

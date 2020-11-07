@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "nosleep.js": "^0.11.0",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.12",
     "vue-cli-plugin-pug": "^1.0.7",
