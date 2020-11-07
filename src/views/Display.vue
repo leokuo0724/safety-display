@@ -1,6 +1,6 @@
 <template lang="pug">
   .display-root
-    .display-text(ref="displayText") {{ displayText }}
+    .display-text(id="displayText" ref="displayText") {{ displayText }}
     router-link(class="back-btn" to="/")
       .back-btn__img
 </template>
@@ -22,14 +22,23 @@ export default {
     }
   },
   mounted() {
-    const size = screen.width >= screen.height ? screen.height : screen.width;
-    this.$refs.displayText.style.fontSize = size + "px";
+    // 以螢幕寬度為字體大小
+    if (window.screen.orientation.type === "portrait-primary") {
+      // 直式
+      this.$refs.displayText.style.fontSize = screen.width + "px";
+    } else {
+      this.$refs.displayText.style.fontSize = screen.height + "px";
+    }
 
-    // exceed width, fire marquee effect
     if (window.localStorage.getItem("displayText").length > 1) {
-      console.log("width: ", this.$refs.displayText.offsetWidth);
       this.marqueeEffect();
     }
+    window.addEventListener("orientationchange", () => {
+      // 設定大小
+      if (window.localStorage.getItem("displayText").length > 1) {
+        this.marqueeEffect();
+      }
+    });
   },
   beforeDestroy() {
     if (this.timer) {
@@ -38,9 +47,15 @@ export default {
   },
   methods: {
     marqueeEffect() {
-      const text = this.$refs.displayText;
+      let velocity = (screen.width / 100) * 3;
+
+      if (this.timer) {
+        clearInterval(this.timer);
+      }
+      let text = this.$refs.displayText;
       this.timer = setInterval(() => {
-        text.scrollLeft += 10;
+        if (!text) return;
+        text.scrollLeft += velocity;
         if (text.scrollLeft >= text.scrollWidth - screen.width) {
           text.scrollLeft = 0;
         }
@@ -56,11 +71,13 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  background: black;
   .display-text {
     overflow: scroll;
     white-space: nowrap;
     animation: breath 0.7s;
     animation-iteration-count: infinite;
+    color: white;
   }
 }
 @keyframes breath {
